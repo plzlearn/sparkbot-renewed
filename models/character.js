@@ -109,11 +109,11 @@ module.exports = class Character {
         this._gearscore = gearscore
         characters.setAttribute(this.id, "gearscore", this.gearscore)
     }
-
+    
     set primaryWeapon(primaryWeapon) {
         let primaryActual = ''
 
-        if (primaryWeapon.includes('sword')) {
+        if (primaryWeapon.includes('sword') && !primaryWeapon.includes('great')) {
             primaryActual = 'Sword and Shield'
         }
         if (primaryWeapon.includes('hammer') || primaryWeapon.includes('maul')) {
@@ -128,7 +128,7 @@ module.exports = class Character {
         if (primaryWeapon.includes('rapier')) {
             primaryActual = 'Rapier'
         }
-        if (primaryWeapon.includes('great') && primaryWeapon.includes('ax')) {
+        if (primaryWeapon.includes('great') && primaryWeapon.includes('axe')) {
             primaryActual = 'Great Axe'
         }
         if (primaryWeapon.includes('bow')) {
@@ -149,6 +149,13 @@ module.exports = class Character {
         if (primaryWeapon.includes('void')) {
             primaryActual = 'Void Gauntlet'
         }
+        if (primaryWeapon.includes('blunder')) {
+            primaryActual = 'Blunderbuss'
+        }
+        if (primaryWeapon.includes('great') && primaryWeapon.includes('sword')) {
+            primaryActual = 'Greatsword'
+        }
+
 
         if (!primaryActual) {
             logger.warn(`Rejected input "primaryWeapon" attribute value "${primaryWeapon}" for user ${this.id}.`)
@@ -161,7 +168,7 @@ module.exports = class Character {
     set secondaryWeapon(secondaryWeapon) {
         let secondaryActual = ''
 
-        if (secondaryWeapon.includes('sword')) {
+        if (secondaryWeapon.includes('sword') && !secondaryWeapon.includes('great')) {
             secondaryActual = 'Sword and Shield'
         }
         if (secondaryWeapon.includes('hammer') || secondaryWeapon.includes('maul')) {
@@ -196,6 +203,12 @@ module.exports = class Character {
         }
         if (secondaryWeapon.includes('void')) {
             secondaryActual = 'Void Gauntlet'
+        }
+        if (secondaryWeapon.includes('blunder')) {
+            secondaryActual = 'Blunderbuss'
+        }
+        if (secondaryWeapon.includes('great') && secondaryWeapon.includes('sword')) {
+            secondaryActual = 'Greatsword'
         }
 
         if (!secondaryActual) {
