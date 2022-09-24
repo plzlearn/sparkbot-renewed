@@ -98,13 +98,13 @@ module.exports = class Character {
         let valid = true
         if (!Number.isInteger(gearscore)) {
             valid = false
-        } else if (gearscore < 1 || gearscore > 600) {
+        } else if (gearscore < 1 || gearscore > 625) {
             valid = false
         }
 
         if (!valid) {
             logger.warn(`Rejected input "gearscore" attribute value "${gearscore}" for user ${this.id}.`)
-            throw "Your gearscore has to be an integer between 1 and 600, inclusive. Try again."
+            throw "Your gearscore has to be an integer between 1 and 625, inclusive. Try again."
         }
         this._gearscore = gearscore
         characters.setAttribute(this.id, "gearscore", this.gearscore)
