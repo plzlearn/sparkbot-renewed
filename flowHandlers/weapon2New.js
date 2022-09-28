@@ -9,7 +9,7 @@ module.exports = (message) => {
         return
     }
 
-    messenger.send(message.author, `And your secondary weapon is ${message.author.character.secondaryWeapon}, great! What's your weight class? Your options are "light", "medium", or "heavy".`)
+    messenger.send(message.author, `And your secondary weapon is ${message.author.character.secondaryWeapon}, great! Which Heartrune are you running? Those things come in clutch!`)
 
-    message.author.flow.state = 'weightNew'
+    message.author.flow.state = 'heartruneNew'
 }
