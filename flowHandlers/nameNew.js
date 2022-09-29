@@ -9,7 +9,7 @@ module.exports = (message) => {
         return
     }
 
-    messenger.send(message.author, `Nice to meet you, ${name}. What company are you in? You can also say "none" if you aren't in one.`)
-
-    message.author.flow.state = 'companyNew'
+    messenger.send(message.author, `Nice to meet you, ${name}. What faction are you in? Valid options are "covenant", "marauders", or "syndicate".`)
+    
+    message.author.flow.state = 'factionNew'
 }

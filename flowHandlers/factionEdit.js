@@ -2,9 +2,9 @@ const messenger = require('../lib/messenger')
 const menuFactory = require('../lib/menuFactory')
 
 module.exports = (message) => {
-    let heartrune = message.content.toLowerCase()
+    let faction = message.content.toLowerCase()
     try {
-        message.author.character.heartrune = heartrune
+        message.author.character.faction = faction
     } catch (ex) {
         messenger.send(message.author, ex)
         return

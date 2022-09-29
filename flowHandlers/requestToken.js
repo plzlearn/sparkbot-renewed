@@ -1,6 +1,7 @@
 const messenger = require('../lib/messenger')
 const sheets = require('../data/sheets')
 const menuFactory = require('../lib/menuFactory')
+const logger = require('../lib/logger');
 
 module.exports = (message) => {
     let code = message.content

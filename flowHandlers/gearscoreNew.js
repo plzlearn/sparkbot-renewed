@@ -9,6 +9,6 @@ module.exports = (message) => {
         return
     }
 
-    messenger.send(message.author, `Your gearscore is ${gearscore}, got it. What's the first weapon you use?`)
-    message.author.flow.state = 'weapon1New'
+    messenger.send(message.author, `Your gearscore is ${gearscore}, got it. What's would best describe your role? Valid options are "dps", "tank" and "healer".`)
+    message.author.flow.state = 'roleNew'
 }

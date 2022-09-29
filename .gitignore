@@ -1,5 +1,6 @@
 config.json
 tokenCache.json
+privatekey.json
 node_modules/
 data/characterData.json
 data/flowData.json

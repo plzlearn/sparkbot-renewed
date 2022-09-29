@@ -3,20 +3,28 @@ const logger = require('../lib/logger')
 const { MessageEmbed } = require('discord.js')
 
 module.exports = class Character {
-    constructor(id, name = null, company = null, level = null, gearscore = null, primaryWeapon = null, secondaryWeapon = null, weight = null, notes = null) {
+    constructor(id, name = null, faction = null, company = null, level = null, gearscore = null, role = null, primaryWeapon = null, secondaryWeapon = null, heartrune = null, weight = null, warInterest = null, notes = null) {
         this.id = id
         this._name = name
+        this._faction = faction
         this._company = company
         this._level = level
         this._gearscore = gearscore
+        this._role = role
         this._primaryWeapon = primaryWeapon
         this._secondaryWeapon = secondaryWeapon
+		this._heartrune = heartrune
         this._weight = weight
+        this._warInterest = warInterest
         this._notes = notes
     }
 
     get name() {
         return this._name
+    }
+    
+    get faction() {
+        return this._faction
     }
 
     get company() {
@@ -30,6 +38,10 @@ module.exports = class Character {
     get gearscore() {
         return this._gearscore
     }
+    
+    get role() {
+        return this._role
+    }
 
     get primaryWeapon() {
         return this._primaryWeapon
@@ -38,9 +50,17 @@ module.exports = class Character {
     get secondaryWeapon() {
         return this._secondaryWeapon
     }
-
+	
+	get heartrune() {
+		return this._heartrune
+	}
+	
     get weight() {
         return this._weight
+    }
+    
+    get warInterest() {
+        return this._warInterest
     }
 
     get notes() {
@@ -59,6 +79,27 @@ module.exports = class Character {
         }
         this._name = name
         characters.setAttribute(this.id, "name", this.name)
+    }
+    
+    set faction(faction) {
+        let factionActual = ''
+
+        if (faction.includes('cov') || faction.includes('yellow')){
+            factionActual = 'Covenant'
+        }
+        if (faction.includes('marauders') || faction.includes('green')) {
+            factionActual = 'Marauders'
+        }
+        if (faction.includes('syn') || faction.includes('purp')) {
+            factionActual = 'Syndicate'
+        }
+
+        if (!factionActual) {
+            logger.warn(`Rejected input "faction" attribute value "${faction}" for user ${this.id}.`)
+            throw 'You didn\'t specify a faction that I know. Valid factions are "Covenant", "Marauders" or "Syndicate". Try again when you\'re ready.'
+        }
+        this._faction = factionActual
+        characters.setAttribute(this.id, "faction", this.faction)
     }
 
     set company(company) {
@@ -110,6 +151,16 @@ module.exports = class Character {
         characters.setAttribute(this.id, "gearscore", this.gearscore)
     }
     
+    set role(role) {
+        if (role != "dps" && role != "tank" && role != "healer") {
+            logger.warn(`Rejected input "role" attribute value "${role}" for user ${this.id}.`)
+            throw 'Whatever you said was not one of the options I listed. Again, your options are "dps", "tank" or "healer".'
+
+        }
+        this._role = role.charAt(0).toUpperCase() + role.slice(1)
+        characters.setAttribute(this.id, "role", this.role)
+    }
+
     set primaryWeapon(primaryWeapon) {
         let primaryActual = ''
 
@@ -218,6 +269,33 @@ module.exports = class Character {
         this._secondaryWeapon = secondaryActual
         characters.setAttribute(this.id, "secondaryWeapon", this.secondaryWeapon)
     }
+	
+    set heartrune(heartrune) {
+        let heartruneActual = ''
+
+        if (heartrune.includes('stone')) {
+            heartruneActual = 'Stoneform'
+        }
+        if (heartrune.includes('detonate')) {
+            heartruneActual = 'Detonate'
+        }
+        if (heartrune.includes('vine')) {
+            heartruneActual = 'Grasping Vines'
+        }
+        if (heartrune.includes('ascent')) {
+            heartruneActual = 'Dark Ascent'
+		}
+        if (heartrune.includes('cannon')) {
+            heartruneActual = 'Cannon Blast'
+		}
+		
+        if (!heartruneActual) {
+            logger.warn(`Rejected input "heartrune" attribute value "${heartrune}" for user ${this.id}.`)
+            throw 'You didn\'t specify a Heartrune that I know. Check the in-game names of the Heartrunes if you aren\'t sure what to call it. Try again when you\'re ready.'
+        }
+        this._heartrune = heartruneActual
+        characters.setAttribute(this.id, "heartrune", this.heartrune)
+    }
 
     set weight(weight) {
         if (weight != "light" && weight != "medium" && weight != "heavy") {
@@ -228,7 +306,17 @@ module.exports = class Character {
         this._weight = weight.charAt(0).toUpperCase() + weight.slice(1)
         characters.setAttribute(this.id, "weight", this.weight)
     }
+	
+    set warInterest(warInterest) {
+        if (warInterest != "yes" && warInterest != "no") {
+            logger.warn(`Rejected input "warInterest" attribute value "${warInterest}" for user ${this.id}.`)
+            throw 'Whatever you said was not one of the options I listed. Again, your options are "yes" or "no".'
 
+        }
+        this._warInterest = warInterest.charAt(0).toUpperCase() + warInterest.slice(1)
+        characters.setAttribute(this.id, "warInterest", this.warInterest)
+    }
+    
     set notes(notes) {
         if (notes.length > 256) {
             logger.warn(`Rejected input "notes" attribute value "${notes}" for user ${this.id}.`)
@@ -249,6 +337,7 @@ module.exports = class Character {
     get embed() {
         let embed = new MessageEmbed()
             .setTitle(this._name).setColor("#DAA520")
+        embed.addField("Faction", this._faction || "None", false)
         embed.addField("Company", this._company || "None", false)
         if (this._level && this._level > 0) {
             embed.addField("Level", "" + this._level, true)
@@ -260,9 +349,12 @@ module.exports = class Character {
         } else {
             embed.addField("Gearscore", "?", true)
         }
+        embed.addField("Role", this._role || "?", false)
         embed.addField("Weapon 1", this._primaryWeapon || "?", false)
         embed.addField("Weapon 2", this._secondaryWeapon || "?", false)
+		embed.addField("Heartrune", this._heartrune || "?", false)
         embed.addField("Weight", this._weight || "?", false)
+        embed.addField("War", this._warInterest || "?", false)
         if (this._notes) {
             embed.addField("Notes", this._notes, false)
         }
@@ -273,12 +365,16 @@ module.exports = class Character {
         let character = new Character(
             key,
             value.name,
+            value.faction,
             value.company,
             value.level,
             value.gearscore,
+            value.role,
             value.primaryWeapon,
             value.secondaryWeapon,
+			value.heartrune,
             value.weight,
+            value.warInterest,
             value.notes)
         return character
     }
