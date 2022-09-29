@@ -44,27 +44,27 @@ const sendUpdate = () => {
     let sheets = google.sheets({ version: "v4", auth: auth })
     sheets.spreadsheets.values.update({
         spreadsheetId: spreadsheetId,
-        range: `${spreadsheetTabNameMutations}!A:M`,
+        range: `${spreadsheetTabNameMutations}!A:R`,
         valueInputOption: 'USER_ENTERED',
         resource: {
             values: buildValueArray(queuedObj)
         }
     }, (err, res) => {
         if (err) {
-            logger.error('Failed to update roster: ' + err);
+            logger.error('Failed to update mutations: ' + err);
             return
         }
     });
 }
 
 const buildValueArray = (obj) => {
-    let value = [["Discord ID", "Name", "Faction", "Company", "Level", "Gearscore", "Role", "Weapon 1", "Weapon 2", "Heartrune", "Weight", "War", "Notes"]]
+    let value = [["Discord ID", "Name", "Genesis Codex", "Genesis Role", "Lazarus Codex", "Lazarus Role", "Dynasty Codex", "Dynasty Role", "Tempest Codex", "Tempest Role", "Depths Codex", "Depths Role", "Barnacles Codex", "Barnacles Role", "Ennead Codex", "Ennead Role", "Starstone Codex", "Starstone Role"]]
 
     let entries = Object.entries(obj).sort((a, b) => {
         return a[1].name.localeCompare(b[1].name);
     })
     for (const [k, v] of entries) {
-        value.push([k, v.name, v.faction || " ", v.company || " ", v.level || " ", v.gearscore || " ", v.role || " ", v.primaryWeapon || " ", v.secondaryWeapon || " ", v.heartrune || " ", v.weight || " ", v.warInterest || " ", v.notes || " "])
+        value.push([k, v.name, v.genesisCodex || " ", v.genesisRole || " ", v.lazarusCodex || " ", v.lazarusRole || " ", v.dynastyCodex || " ", v.dynastyRole || " ", v.tempestCodex || " ", v.tempestRole || " ", v.depthsCodex || " ", v.depthsRole || " ", v.barnaclesCodex || " ", v.barnaclesRole || " ", v.enneadCodex || " ", v.enneadRole || " ", v.starstoneCodex || " ", v.starstoneRole || " "])
     }
     return value
 }
