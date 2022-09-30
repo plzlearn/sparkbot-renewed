@@ -1,5 +1,5 @@
 const { google } = require('googleapis')
-const { spreadsheetId, spreadsheetTabName } = require('../config.json')
+const { spreadsheetId, spreadsheetTabNameMutations } = require('../config.json')
 const fs = require("fs")
 const readline = require('readline');
 const logger = require('../lib/logger');

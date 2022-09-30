@@ -102,7 +102,7 @@ const _set = (obj, next) => {
         else cache = obj
         next(err)
     })
-    sheets.update(obj)
+    mutsheets.update(obj)
 }
 
 module.exports.getOrAdd = getOrAdd

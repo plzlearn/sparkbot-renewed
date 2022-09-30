@@ -1,4 +1,5 @@
 const characters = require('./data/characters')
+const mutations = require('./data/mutations')
 const flows = require('./data/flows')
 const grants = require('./data/grants')
 const wars = require('./data/wars')
@@ -17,6 +18,11 @@ const enhanceUserObject = (user, next) => {
             return next(`Failed to get character for id ${user.id}: ${err}`)
         }
         user.character = character
+        mutations.getOrAdd(user.id, (err, mutation) => {
+            if (err) {
+                return next(`Failed to get mutations for id ${user.id}: ${err}`)
+            }
+            user.mutation = mutation
         flows.getOrAdd(user.id, (err, flow) => {
             if (err) {
                 return next(`Failed to get flow for id ${user.id}: ${err}`)
@@ -33,6 +39,7 @@ const enhanceUserObject = (user, next) => {
                     }
                     user.wars = wars
                     next(null, user)
+                    })
                 })
             })
         })
