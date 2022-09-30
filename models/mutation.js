@@ -106,9 +106,10 @@ module.exports = class Mutation {
         mutations.setAttribute(this.id, "name", this.name)
     }
     
-    set genesisCodex(genesisCodex) {
+    set genesis(genesis) {
+        const valueArray = genesis.split(" ");
         let valid = true
-        if (!Number.isInteger(genesisCodex)) {
+        if (!Number.isInteger(valueArray[1])) {
             valid = false
         } else if (genesisCodex < 1 || genesisCodex > 10) {
             valid = false
